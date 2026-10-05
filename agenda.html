@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Agenda Telefônica</title>
+
+    <style>
+
+       /* ==============================
+   CONFIGURAÇÕES GERAIS
+============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 50px 20px;
+
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #f8fafc;
+}
+
+
+/* ==============================
+   TÍTULO
+============================== */
+
+h1 {
+    font-size: 42px;
+    margin-bottom: 40px;
+
+    letter-spacing: 1px;
+
+    text-align: center;
+}
+
+
+/* ==============================
+   ÁREA DO CADASTRO
+============================== */
+
+h2 {
+    width: 100%;
+    max-width: 500px;
+
+    margin-bottom: 20px;
+
+    font-size: 24px;
+    text-align: center;
+}
+
+
+/* ==============================
+   CAMPOS
+============================== */
+
+input {
+    width: 100%;
+    max-width: 500px;
+
+    padding: 15px 18px;
+    margin-bottom: 15px;
+
+    border: 2px solid #334155;
+    border-radius: 10px;
+
+    background-color: #1e293b;
+    color: #f8fafc;
+
+    font-size: 16px;
+
+    outline: none;
+
+    transition: 0.3s;
+}
+
+input::placeholder {
+    color: #94a3b8;
+}
+
+input:focus {
+    border-color: #38bdf8;
+
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+
+/* ==============================
+   BOTÃO
+============================== */
+
+button {
+    width: 100%;
+    max-width: 500px;
+
+    padding: 15px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+
+/* ==============================
+   RESPONSIVIDADE
+============================== */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 30px 15px;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    h2 {
+        font-size: 21px;
+    }
+
+    input,
+    button {
+        max-width: 100%;
+    }
+}
+
+
+/* ==============================
+   CARDS DE CONTATOS E COMPROMISSOS
+============================== */
+
+#listaContatos,
+#listaCompromissos {
+    width: 100%;
+    max-width: 900px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    margin: 10px auto 35px;
+}
+
+.contato,
+.compromisso {
+    position: relative;
+    padding: 22px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 18px;
+    background: rgba(30, 41, 59, 0.88);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+                border-color 0.25s ease;
+    overflow: hidden;
+}
+
+.contato::before,
+.compromisso::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #38bdf8, #2563eb);
+}
+
+.contato:hover,
+.compromisso:hover {
+    transform: translateY(-5px);
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.32);
+}
+
+.contato strong,
+.compromisso strong {
+    display: block;
+    margin-bottom: 14px;
+    font-size: 21px;
+    color: #f8fafc;
+}
+
+.contato,
+.compromisso {
+    color: #cbd5e1;
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+.contato button,
+.compromisso button {
+    width: auto;
+    max-width: none;
+    padding: 9px 15px;
+    margin-top: 15px;
+    margin-right: 8px;
+    border-radius: 9px;
+    font-size: 14px;
+}
+
+.contato button:first-of-type,
+.compromisso button:first-of-type {
+    background: #0ea5e9;
+}
+
+.contato button:last-of-type,
+.compromisso button:last-of-type {
+    background: #dc2626;
+}
+
+.contato button:first-of-type:hover,
+.compromisso button:first-of-type:hover {
+    background: #0284c7;
+}
+
+.contato button:last-of-type:hover,
+.compromisso button:last-of-type:hover {
+    background: #b91c1c;
+}
+
+hr {
+    width: 100%;
+    max-width: 900px;
+    margin: 30px 0 35px;
+    border: none;
+    border-top: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.telefone-linha {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 15px;
+}
+
+.telefone-linha input {
+    margin-bottom: 0;
+}
+
+.telefone-linha #ddd {
+    width: 58px;
+    text-align: center;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.telefone-linha #telefone {
+    flex: 1;
+}
+
+.ddd-prefixo {
+    color: #f8fafc;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .telefone-linha {
+        max-width: 100%;
+    }
+}
+
+select {
+    width: 100%;
+    max-width: 500px;
+    padding: 15px 18px;
+    margin-bottom: 15px;
+    border: 2px solid #334155;
+    border-radius: 10px;
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+select:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+input[type="date"],
+input[type="time"] {
+    color-scheme: dark;
+}
+
+@media (max-width: 600px) {
+    #listaContatos,
+    #listaCompromissos {
+        grid-template-columns: 1fr;
+    }
+
+    .contato,
+    .compromisso {
+        padding: 18px;
+    }
+}
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Agenda Telefônica</h1>
+
+
+    <!-- ========================= -->
+    <!-- CADASTRO DE CONTATO -->
+    <!-- ========================= -->
+
+    <h2 id="cadastroContato">Cadastrar contato</h2>
+
+    <input type="text" id="nome" placeholder="Nome">
+
+    <select id="estado">
+        <option value="">Estado</option>
+        <option value="CE">Ceará</option>
+        <option value="SP">São Paulo</option>
+        <option value="RJ">Rio de Janeiro</option>
+    </select>
+
+    <select id="cidade">
+        <option value="">Cidade</option>
+    </select>
+
+    <div class="telefone-linha">
+
+        <span class="ddd-prefixo">(</span>
+
+        <input
+            type="text"
+            id="ddd"
+            placeholder="DDD"
+            readonly
+        >
+
+        <span class="ddd-prefixo">)</span>
+
+        <input
+            type="text"
+            id="telefone"
+            placeholder="Telefone"
+        >
+
+    </div>
+
+    <button id="botaoPrincipal" onclick="cadastrarContato()">
+        Cadastrar
+    </button>
+
+    <button
+        id="botaoCancelar"
+        onclick="cancelarEdicao()"
+        style="display:none;"
+    >
+        Cancelar
+    </button>
+
+
+    <hr>
+
+
+    <!-- ========================= -->
+    <!-- LISTA DE CONTATOS -->
+    <!-- ========================= -->
+
+    <h2>Lista de contatos</h2>
+
+    <div id="listaContatos"></div>
+
+
+    <hr>
+
+
+    <!-- ========================= -->
+    <!-- CADASTRO DE COMPROMISSO -->
+    <!-- ========================= -->
+
+    <h2 id="cadastroCompromisso">Cadastrar compromisso</h2>
+
+    <input
+        type="text"
+        id="tituloCompromisso"
+        placeholder="Título do compromisso"
+    >
+
+    <input
+        type="date"
+        id="dataCompromisso"
+    >
+
+    <input
+        type="time"
+        id="horarioCompromisso"
+    >
+
+    <select id="contatoCompromisso">
+
+        <option value="">
+            Selecione um contato
+        </option>
+
+        <option value="novo">
+            ➕ Cadastrar novo contato
+        </option>
+
+    </select>
+
+    <br>
+
+    <button
+        id="botaoCompromisso"
+        onclick="cadastrarCompromisso()"
+    >
+        Cadastrar compromisso
+    </button>
+
+    <button
+        id="botaoCancelarCompromisso"
+        onclick="cancelarEdicaoCompromisso()"
+        style="display:none;"
+    >
+        Cancelar
+    </button>
+
+
+    <hr>
+
+
+    <!-- ========================= -->
+    <!-- LISTA DE COMPROMISSOS -->
+    <!-- ========================= -->
+
+    <h2>Lista de compromissos</h2>
+
+    <div id="listaCompromissos"></div>
+
+
+    <script>
+
+
+        // ==============================
+        // ARRAYS PRINCIPAIS
+        // ==============================
+
+        const contatos = [];
+
+        const compromissos = [];
+
+
+        // Guarda o ID do contato que está sendo editado
+        let contatoEditando = null;
+
+
+        // Guarda o ID do compromisso que está sendo editado
+        let compromissoEditando = null;
+
+
+        // Controla os próximos IDs
+        let proximoIdContato = 1;
+        let proximoIdCompromisso = 1;
+
+
+        // ==============================
+        // CIDADES E DDDs
+        // ==============================
+
+        const cidades = {
+
+            "CE": [
+
+                { nome: "Itaitinga", ddd: "85" },
+                { nome: "Fortaleza", ddd: "85" },
+                { nome: "Caucaia", ddd: "85" },
+                { nome: "Maracanaú", ddd: "85" },
+                { nome: "Eusébio", ddd: "85" },
+                { nome: "Aquiraz", ddd: "85" },
+                { nome: "Horizonte", ddd: "85" },
+                { nome: "Pacatuba", ddd: "85" },
+                { nome: "Maranguape", ddd: "85" },
+                { nome: "Itapipoca", ddd: "88" },
+                { nome: "Sobral", ddd: "88" },
+                { nome: "Juazeiro do Norte", ddd: "88" }
+
+            ],
+
+            "SP": [
+
+                { nome: "São Paulo", ddd: "11" },
+                { nome: "Campinas", ddd: "19" },
+                { nome: "Santos", ddd: "13" }
+
+            ],
+
+            "RJ": [
+
+                { nome: "Rio de Janeiro", ddd: "21" },
+                { nome: "Niterói", ddd: "21" },
+                { nome: "Petrópolis", ddd: "24" }
+
+            ]
+
+        };
+
+
+        // ==============================
+        // ELEMENTOS DO FORMULÁRIO
+        // ==============================
+
+        const estado = document.getElementById("estado");
+
+        const cidade = document.getElementById("cidade");
+
+        const ddd = document.getElementById("ddd");
+
+
+        // ==============================
+        // ALTERAÇÃO DO ESTADO
+        // ==============================
+
+        estado.addEventListener("change", function () {
+
+            cidade.innerHTML = '<option value="">Cidade</option>';
+
+            ddd.value = "";
+
+            const estadoSelecionado = estado.value;
+
+            if (!estadoSelecionado) {
+                return;
+            }
+
+
+            cidades[estadoSelecionado].forEach(function (item) {
+
+                const opcao = document.createElement("option");
+
+                opcao.value = item.nome;
+
+                opcao.textContent = item.nome;
+
+                cidade.appendChild(opcao);
+
+            });
+
+        });
+
+
+        // ==============================
+        // ALTERAÇÃO DA CIDADE
+        // ==============================
+
+        cidade.addEventListener("change", function () {
+
+            const cidadeSelecionada = cidade.value;
+
+            const estadoSelecionado = estado.value;
+
+
+            if (!cidadeSelecionada || !estadoSelecionado) {
+
+                ddd.value = "";
+
+                return;
+
+            }
+
+
+            const cidadeEncontrada =
+                cidades[estadoSelecionado].find(function (item) {
+
+                    return item.nome === cidadeSelecionada;
+
+                });
+
+
+            if (cidadeEncontrada) {
+
+                ddd.value = cidadeEncontrada.ddd;
+
+            }
+
+        });
+
+
+        // ==============================
+        // CADASTRAR / EDITAR CONTATO
+        // ==============================
+
+        function cadastrarContato() {
+
+            const nome =
+                document.getElementById("nome").value.trim();
+
+            const cidadeValor =
+                cidade.value;
+
+            const estadoValor =
+                estado.value;
+
+            const dddValor =
+                ddd.value;
+
+            const telefone =
+                document.getElementById("telefone").value.trim();
+
+
+            // Validação dos campos
+
+            if (
+                nome === "" ||
+                cidadeValor === "" ||
+                estadoValor === "" ||
+                dddValor === "" ||
+                telefone === ""
+            ) {
+
+                alert("Preencha todos os campos.");
+
+                return;
+
+            }
+
+
+            // Verifica se o nome possui letras
+
+            if (!/[A-Za-zÀ-ÿ]/.test(nome)) {
+
+                alert("O nome deve conter letras.");
+
+                return;
+
+            }
+
+
+            // Remove espaços, parênteses e hífen
+
+            const telefoneLimpo =
+                telefone.replace(/[\s()-]/g, "");
+
+
+            // Verifica se só existem números
+
+            if (!/^\d+$/.test(telefoneLimpo)) {
+
+                alert("O telefone deve conter apenas números.");
+
+                return;
+
+            }
+
+
+            // Verifica quantidade de números
+
+            if (
+                telefoneLimpo.length !== 8 &&
+                telefoneLimpo.length !== 9
+            ) {
+
+                alert("O telefone deve ter 8 ou 9 dígitos.");
+
+                return;
+
+            }
+
+
+            // ==========================
+            // EDITAR CONTATO
+            // ==========================
+
+            if (contatoEditando !== null) {
+
+                const contato =
+                    contatos.find(function (item) {
+
+                        return item.id === contatoEditando;
+
+                    });
+
+
+                if (!contato) {
+                    return;
+                }
+
+
+                contato.nome = nome;
+
+                contato.cidade = cidadeValor;
+
+                contato.estado = estadoValor;
+
+                contato.ddd = dddValor;
+
+                contato.telefone = telefoneLimpo;
+
+
+                alert("Contato alterado com sucesso!");
+
+            }
+
+
+            // ==========================
+            // NOVO CONTATO
+            // ==========================
+
+            else {
+
+                const contato = {
+
+                    id: proximoIdContato,
+
+                    nome: nome,
+
+                    cidade: cidadeValor,
+
+                    estado: estadoValor,
+
+                    ddd: dddValor,
+
+                    telefone: telefoneLimpo
+
+                };
+
+
+                contatos.push(contato);
+
+                proximoIdContato++;
+
+
+                alert("Contato cadastrado com sucesso!");
+
+            }
+
+
+            listarContatos();
+
+            atualizarListaContatos();
+
+            limparCampos();
+
+        }
+
+
+        // ==============================
+        // LISTAR CONTATOS
+        // ==============================
+
+        function listarContatos() {
+
+            const lista =
+                document.getElementById("listaContatos");
+
+            lista.innerHTML = "";
+
+
+            // Ordena alfabeticamente
+
+            const contatosOrdenados =
+                [...contatos].sort(function (a, b) {
+
+                    return a.nome.localeCompare(
+                        b.nome,
+                        "pt-BR",
+                        {
+                            sensitivity: "base"
+                        }
+                    );
+
+                });
+
+
+            contatosOrdenados.forEach(function (contato) {
+
+                const div =
+                    document.createElement("div");
+
+
+                div.classList.add("contato");
+
+
+                div.innerHTML = `
+
+                    <strong>${contato.nome}</strong><br>
+
+                    Telefone:
+                    (${contato.ddd}) ${contato.telefone}<br>
+
+                    Cidade:
+                    ${contato.cidade} - ${contato.estado}<br>
+
+                    <button
+                        onclick="editarContato(${contato.id})"
+                    >
+                        Editar
+                    </button>
+
+                    <button
+                        onclick="excluirContato(${contato.id})"
+                    >
+                        Excluir
+                    </button>
+
+                `;
+
+
+                lista.appendChild(div);
+
+            });
+
+        }
+
+
+        // ==============================
+        // EDITAR CONTATO
+        // ==============================
+
+        function editarContato(id) {
+
+            const contato =
+                contatos.find(function (item) {
+
+                    return item.id === id;
+
+                });
+
+
+            if (!contato) {
+                return;
+            }
+
+
+            contatoEditando = id;
+
+
+            document.getElementById("nome").value =
+                contato.nome;
+
+
+            estado.value =
+                contato.estado;
+
+
+            // Recarrega cidades
+
+            cidade.innerHTML =
+                '<option value="">Cidade</option>';
+
+
+            cidades[contato.estado].forEach(function (item) {
+
+                const opcao =
+                    document.createElement("option");
+
+                opcao.value =
+                    item.nome;
+
+                opcao.textContent =
+                    item.nome;
+
+                cidade.appendChild(opcao);
+
+            });
+
+
+            cidade.value =
+                contato.cidade;
+
+
+            ddd.value =
+                contato.ddd;
+
+
+            document.getElementById("telefone").value =
+                contato.telefone;
+
+
+            document.getElementById("botaoPrincipal")
+                .textContent = "Salvar alteração";
+
+
+            document.getElementById("botaoCancelar")
+                .style.display = "inline-block";
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+
+        // ==============================
+        // CANCELAR EDIÇÃO DE CONTATO
+        // ==============================
+
+        function cancelarEdicao() {
+
+            contatoEditando = null;
+
+            limparCampos();
+
+        }
+
+
+        // ==============================
+        // LIMPAR FORMULÁRIO DE CONTATO
+        // ==============================
+
+        function limparCampos() {
+
+            document.getElementById("nome").value = "";
+
+            estado.value = "";
+
+            cidade.innerHTML =
+                '<option value="">Cidade</option>';
+
+            ddd.value = "";
+
+            document.getElementById("telefone").value = "";
+
+
+            document.getElementById("botaoPrincipal")
+                .textContent = "Cadastrar";
+
+
+            document.getElementById("botaoCancelar")
+                .style.display = "none";
+
+
+            contatoEditando = null;
+
+        }
+
+
+        // ==============================
+        // EXCLUIR CONTATO
+        // ==============================
+
+        function excluirContato(id) {
+
+            const contato =
+                contatos.find(function (item) {
+
+                    return item.id === id;
+
+                });
+
+
+            if (!contato) {
+                return;
+            }
+
+
+            const confirmar =
+                confirm(
+                    `Deseja realmente excluir o contato ${contato.nome}?`
+                );
+
+
+            if (!confirmar) {
+                return;
+            }
+
+
+            const indice =
+                contatos.findIndex(function (item) {
+
+                    return item.id === id;
+
+                });
+
+
+            contatos.splice(indice, 1);
+
+
+            if (contatoEditando === id) {
+
+                limparCampos();
+
+            }
+
+
+            listarContatos();
+
+            atualizarListaContatos();
+
+
+            alert("Contato excluído com sucesso!");
+
+        }
+
+
+        // ==============================
+        // ATUALIZAR SELECT DE CONTATOS
+        // ==============================
+
+        function atualizarListaContatos() {
+
+            const select =
+                document.getElementById("contatoCompromisso");
+
+
+            select.innerHTML = `
+
+                <option value="">
+                    Selecione um contato
+                </option>
+
+                <option value="novo">
+                    ➕ Cadastrar novo contato
+                </option>
+
+            `;
+
+
+            contatos.forEach(function (contato) {
+
+                const opcao =
+                    document.createElement("option");
+
+
+                opcao.value =
+                    contato.id;
+
+
+                opcao.textContent =
+                    contato.nome;
+
+
+                select.appendChild(opcao);
+
+            });
+
+        }
+
+
+        // ==============================
+        // BOTÃO "NOVO CONTATO"
+        // ==============================
+
+        document
+            .getElementById("contatoCompromisso")
+            .addEventListener("change", function () {
+
+                if (this.value === "novo") {
+
+                    document
+                        .getElementById("cadastroContato")
+                        .scrollIntoView({
+                            behavior: "smooth"
+                        });
+
+
+                    this.value = "";
+
+                }
+
+            });
+
+
+        // ==============================
+        // CADASTRAR / EDITAR COMPROMISSO
+        // ==============================
+
+        function cadastrarCompromisso() {
+
+            const titulo =
+                document
+                    .getElementById("tituloCompromisso")
+                    .value
+                    .trim();
+
+
+            const data =
+                document
+                    .getElementById("dataCompromisso")
+                    .value;
+
+
+            const horario =
+                document
+                    .getElementById("horarioCompromisso")
+                    .value;
+
+
+            const contatoId =
+                document
+                    .getElementById("contatoCompromisso")
+                    .value;
+
+
+            // Verifica se existem contatos
+
+            if (contatos.length === 0) {
+
+                alert(
+                    "Nenhum contato cadastrado. Cadastre um contato primeiro."
+                );
+
+                return;
+
+            }
+
+
+            // Validação
+
+            if (
+                titulo === "" ||
+                data === "" ||
+                horario === "" ||
+                contatoId === ""
+            ) {
+
+                alert(
+                    "Preencha o título, a data, o horário e selecione um contato."
+                );
+
+                return;
+
+            }
+
+
+            // ==============================
+            // VERIFICAR CONFLITO DE HORÁRIO
+            // ==============================
+
+            const existeConflito =
+                compromissos.some(function (item) {
+
+                    // Quando estiver editando,
+                    // ignora o próprio compromisso
+
+                    if (item.id === compromissoEditando) {
+                        return false;
+                    }
+
+
+                    return (
+                        item.data === data &&
+                        item.horario === horario
+                    );
+
+                });
+
+
+            if (existeConflito) {
+
+                alert(
+                    "Já existe um compromisso marcado para essa data e horário."
+                );
+
+                return;
+
+            }
+
+
+            // ==========================
+            // EDITAR COMPROMISSO
+            // ==========================
+
+            if (compromissoEditando !== null) {
+
+                const compromisso =
+                    compromissos.find(function (item) {
+
+                        return item.id === compromissoEditando;
+
+                    });
+
+
+                if (!compromisso) {
+                    return;
+                }
+
+
+                compromisso.titulo = titulo;
+
+                compromisso.data = data;
+
+                compromisso.horario = horario;
+
+                compromisso.contatoId =
+                    Number(contatoId);
+
+
+                alert(
+                    "Compromisso alterado com sucesso!"
+                );
+
+            }
+
+
+            // ==========================
+            // NOVO COMPROMISSO
+            // ==========================
+
+            else {
+
+                const compromisso = {
+
+                    id: proximoIdCompromisso,
+
+                    titulo: titulo,
+
+                    data: data,
+
+                    horario: horario,
+
+                    contatoId: Number(contatoId)
+
+                };
+
+
+                compromissos.push(compromisso);
+
+                proximoIdCompromisso++;
+
+
+                alert(
+                    "Compromisso cadastrado com sucesso!"
+                );
+
+            }
+
+
+            listarCompromissos();
+
+            limparCamposCompromisso();
+
+        }
+
+
+        // ==============================
+        // LISTAR COMPROMISSOS
+        // ==============================
+
+        function listarCompromissos() {
+
+            const lista =
+                document.getElementById("listaCompromissos");
+
+
+            lista.innerHTML = "";
+
+
+            // Cria uma cópia para ordenar
+
+            const compromissosOrdenados =
+                [...compromissos].sort(function (a, b) {
+
+                    const dataA =
+                        new Date(`${a.data}T${a.horario}`);
+
+
+                    const dataB =
+                        new Date(`${b.data}T${b.horario}`);
+
+
+                    return dataA - dataB;
+
+                });
+
+
+            compromissosOrdenados.forEach(function (compromisso) {
+
+
+                // Procura o contato relacionado
+
+                const contato =
+                    contatos.find(function (item) {
+
+                        return item.id === compromisso.contatoId;
+
+                    });
+
+
+                // Formata a data
+
+                const partesData =
+                    compromisso.data.split("-");
+
+
+                const dataFormatada =
+                    `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+
+
+                const div =
+                    document.createElement("div");
+
+
+                div.classList.add("compromisso");
+
+
+                div.innerHTML = `
+
+                    <strong>
+                        ${compromisso.titulo}
+                    </strong>
+                    <br>
+
+                    Data:
+                    ${dataFormatada}
+                    <br>
+
+                    Horário:
+                    ${compromisso.horario}
+                    <br>
+
+                    Contato:
+                    ${contato
+                        ? contato.nome
+                        : "Contato não encontrado"
+                    }
+
+                    <br><br>
+
+                    <button
+                        onclick="editarCompromisso(${compromisso.id})"
+                    >
+                        Editar
+                    </button>
+
+                    <button
+                        onclick="excluirCompromisso(${compromisso.id})"
+                    >
+                        Excluir
+                    </button>
+
+                `;
+
+
+                lista.appendChild(div);
+
+            });
+
+        }
+
+
+        // ==============================
+        // B9 - EDITAR COMPROMISSO
+        // ==============================
+
+        function editarCompromisso(id) {
+
+            const compromisso =
+                compromissos.find(function (item) {
+
+                    return item.id === id;
+
+                });
+
+
+            if (!compromisso) {
+                return;
+            }
+
+
+            // Guarda qual compromisso está sendo editado
+
+            compromissoEditando = id;
+
+
+            // Coloca os dados no formulário
+
+            document.getElementById("tituloCompromisso").value =
+                compromisso.titulo;
+
+
+            document.getElementById("dataCompromisso").value =
+                compromisso.data;
+
+
+            document.getElementById("horarioCompromisso").value =
+                compromisso.horario;
+
+
+            document.getElementById("contatoCompromisso").value =
+                compromisso.contatoId;
+
+
+            // Troca o texto do botão
+
+            document.getElementById("botaoCompromisso")
+                .textContent = "Salvar alteração";
+
+
+            // Mostra botão cancelar
+
+            document.getElementById("botaoCancelarCompromisso")
+                .style.display = "inline-block";
+
+
+            // Sobe até o formulário
+
+            document
+                .getElementById("cadastroCompromisso")
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
+        }
+
+
+        // ==============================
+        // CANCELAR EDIÇÃO DE COMPROMISSO
+        // ==============================
+
+        function cancelarEdicaoCompromisso() {
+
+            compromissoEditando = null;
+
+            limparCamposCompromisso();
+
+        }
+
+
+        // ==============================
+        // LIMPAR FORMULÁRIO DE COMPROMISSO
+        // ==============================
+
+        function limparCamposCompromisso() {
+
+            document.getElementById("tituloCompromisso").value = "";
+
+            document.getElementById("dataCompromisso").value = "";
+
+            document.getElementById("horarioCompromisso").value = "";
+
+            document.getElementById("contatoCompromisso").value = "";
+
+
+            document.getElementById("botaoCompromisso")
+                .textContent = "Cadastrar compromisso";
+
+
+            document.getElementById("botaoCancelarCompromisso")
+                .style.display = "none";
+
+
+            compromissoEditando = null;
+
+        }
+
+
+        // ==============================
+        // B10 - EXCLUIR COMPROMISSO
+        // ==============================
+
+        function excluirCompromisso(id) {
+
+            const compromisso =
+                compromissos.find(function (item) {
+
+                    return item.id === id;
+
+                });
+
+
+            if (!compromisso) {
+                return;
+            }
+
+
+            const confirmar =
+                confirm(
+                    `Deseja realmente excluir o compromisso "${compromisso.titulo}"?`
+                );
+
+
+            if (!confirmar) {
+                return;
+            }
+
+
+            const indice =
+                compromissos.findIndex(function (item) {
+
+                    return item.id === id;
+
+                });
+
+
+            compromissos.splice(indice, 1);
+
+
+            // Se estava editando esse compromisso,
+            // limpa o formulário
+
+            if (compromissoEditando === id) {
+
+                limparCamposCompromisso();
+
+            }
+
+
+            listarCompromissos();
+
+
+            alert(
+                "Compromisso excluído com sucesso!"
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>
